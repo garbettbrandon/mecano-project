@@ -41,12 +41,14 @@ let hasSavedScore = false;
 
 function loadParagraph() {
   const ranIndex = Math.floor(Math.random() * paragraphs.length);
-  typingText.innerHTML = "";
+  const fragment = document.createDocumentFragment();
   paragraphs[ranIndex].split("").forEach((char) => {
-    // console.log(char);
-    let span = `<span>${char}</span>`;
-    typingText.innerHTML += span;
+    let span = document.createElement("span");
+    span.textContent = char;
+    fragment.appendChild(span);
   });
+  typingText.innerHTML = "";
+  typingText.appendChild(fragment);
   typingText.querySelectorAll("span")[0].classList.add("active");
   document.addEventListener("keydown", () => inpField.focus());
   typingText.addEventListener("click", () => inpField.focus());
