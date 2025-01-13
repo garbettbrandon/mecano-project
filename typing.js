@@ -1,3 +1,4 @@
+// Contiene una lista de párrafos aleatorios que el usuario debe escribir. Cada párrafo es una cadena de texto.
 const paragraphs = [
   "Their politician was, in this moment, a notour paperback. The first armless grouse is, in its own way, a gear. The coat is a wash. However, a cake is the llama of a caravan. Snakelike armies show us how playgrounds can be viscoses. Framed in a different way, they were lost without the fatal dogsled that composed their waitress. Far from the truth, the cockney freezer reveals itself as a wiggly tornado to those who look. The first hawklike sack.",
   "Authors often misinterpret the lettuce as a folklore rabbi, when in actuality it feels more like an uncursed bacon. Pursued distances show us how mother-in-laws can be charleses. Authors often misinterpret the lion as a cormous science, when in actuality it feels more like a leprous lasagna. Recent controversy aside, their band was, in this moment, a racemed suit. The clutch of a joke becomes a togaed chair. The first pickled chess is.",
@@ -20,6 +21,7 @@ const paragraphs = [
   "Those cowbells are nothing more than elements. This could be, or perhaps before stockings, thoughts were only opinions. A coil of the exclamation is assumed to be a hurtless toy. A board is the cast of a religion. In ancient times the first stinko sailboat is, in its own way, an exchange. Few can name a tutti channel that isn't a footless operation. Extending this logic, an oatmeal is the rooster of a shake. Those step-sons are nothing more than matches.",
 ];
 
+// Elementos del DOM
 const typingText = document.querySelector(".typing-text p");
 const inpField = document.querySelector(".wrapper .input-field");
 const tryAgainBtn = document.querySelector(".content button");
@@ -31,6 +33,7 @@ const timeItems = document.querySelectorAll(".seconds");
 const rankButton = document.querySelector("#show-rankings");
 const resetRankBtn = document.querySelector("#reset-rankings");
 
+// Variables globales
 let timer;
 let maxTime = 30;
 let timeLeft = maxTime;
@@ -39,38 +42,60 @@ let mistakes = 0;
 let isTyping = false;
 let hasSavedScore = false;
 
+// Funciones
+
+// Cargar un párrafo aleatorio en el elemento de texto
 function loadParagraph() {
+  // Obtener un párrafo aleatorio
   const ranIndex = Math.floor(Math.random() * paragraphs.length);
+  // Crear un fragmento de documento para el párrafo
   const fragment = document.createDocumentFragment();
+  // Crear un span para cada carácter del párrafo
   paragraphs[ranIndex].split("").forEach((char) => {
     let span = document.createElement("span");
     span.textContent = char;
     fragment.appendChild(span);
   });
+  // Limpiar el contenido actual y añadir el nuevo párrafo
   typingText.innerHTML = "";
+  // Añadir el fragmento al párrafo
   typingText.appendChild(fragment);
+  // Añadir la clase 'active' al primer carácter
   typingText.querySelectorAll("span")[0].classList.add("active");
+  // Añadir el evento de tecla para enfocar el campo de entrada
   document.addEventListener("keydown", () => inpField.focus());
+  // Añadir el evento de clic al párrafo para enfocar el campo de entrada
   typingText.addEventListener("click", () => inpField.focus());
 }
 
+// Inicializa la escritura y el temporizador
 function initTyping() {
+  // Obtener todos los caracteres del párrafo
   let characters = typingText.querySelectorAll("span");
+  // Obtener el carácter que el usuario ha escrito
   let typedChar = inpField.value.split("")[charIndex];
+  // Verificar si el usuario ha escrito el carácter correcto con la condición de tiempo.
   if (charIndex < characters.length - 1 && timeLeft > 0) {
+    // Iniciar el temporizador si no se ha iniciado
     if (!isTyping) {
       timer = setInterval(initTimer, 1000);
       isTyping = true;
     }
+    // Verificar si el carácter escrito es correcto o incorrecto según el carácter del párrafo.
     if (typedChar == null) {
+      // Retroceder si la tecla retroceso es presionada
       if (charIndex > 0) {
+        // Retroceder solo si el carácter actual no es correcto
         charIndex--;
+        // Disminuir el número de errores si el carácter actual es incorrecto
         if (characters[charIndex].classList.contains("incorrect")) {
           mistakes--;
         }
+        // Remover las clases de correcto e incorrecto
         characters[charIndex].classList.remove("correct", "incorrect");
       }
     } else {
+      // Verificar si el carácter escrito es correcto o incorrecto
       if (characters[charIndex].innerText == typedChar) {
         characters[charIndex].classList.add("correct");
       } else {
@@ -79,14 +104,21 @@ function initTyping() {
       }
       charIndex++;
     }
+    // Remover la clase 'active' de todos los elementos y añadirla al carácter actual
     characters.forEach((span) => span.classList.remove("active"));
+    // Añadir la clase 'active' al carácter actual
     characters[charIndex].classList.add("active");
 
+    // Calcular las estadísticas
     let wpm = Math.round(
+      // Calcular las palabras por minuto
       ((charIndex - mistakes) / 5 / (maxTime - timeLeft)) * 60
     );
+
+    // Asegurarse de que wpm no sea negativo o NaN
     wpm = wpm < 0 || !wpm || wpm === Infinity ? 0 : wpm;
 
+    // Actualizar las estadísticas en la interfaz de usuario
     wpmTag.innerText = wpm;
     mistakeTag.innerText = mistakes;
     cpmTag.innerText = charIndex - mistakes;
@@ -102,26 +134,31 @@ function initTyping() {
   }
 }
 
+// Inicializa el temporizador
 function initTimer() {
+  // Verificar si el tiempo restante es mayor que 0.
   if (timeLeft > 0) {
     timeLeft--;
     timeTag.innerText = timeLeft;
+    // Calcular las palabras por minuto
     let wpm = Math.round(
       ((charIndex - mistakes) / 5 / (maxTime - timeLeft)) * 60
     );
     wpmTag.innerText = wpm;
   } else {
+    // El tiempo ha terminado, detener el temporizador
     clearInterval(timer);
   }
 }
 
+// Reinicia el juego
 function resetGame() {
   loadParagraph(); // Cargar un nuevo párrafo
   clearInterval(timer); // Detener cualquier temporizador activo
   timeLeft = maxTime; // Usar el tiempo actualizado
-  charIndex = 0;
-  mistakes = 0;
-  isTyping = false;
+  charIndex = 0; // Reiniciar el índice de caracteres
+  mistakes = 0; // Reiniciar el número de errores
+  isTyping = false; // Reiniciar la bandera
   hasSavedScore = false; // Reiniciar la bandera
   inpField.value = ""; // Limpiar el campo de entrada
   timeTag.innerText = timeLeft; // Mostrar el tiempo actualizado
@@ -130,6 +167,7 @@ function resetGame() {
   cpmTag.innerText = 0;
 }
 
+// Funciones de rankings
 function saveScore(wpm, mistakes) {
   // Obtener los datos existentes de localStorage o inicializar un objeto vacío
   let rankings = JSON.parse(localStorage.getItem("rankings")) || {
@@ -148,6 +186,7 @@ function saveScore(wpm, mistakes) {
   localStorage.setItem("rankings", JSON.stringify(rankings));
 }
 
+// Muestra los rankings en la página
 function showRankings() {
   // Obtener los rankings del localStorage
   let rankings = JSON.parse(localStorage.getItem("rankings")) || {
@@ -172,17 +211,24 @@ function showRankings() {
   const rankingContainer = document.querySelector(".ranking-container");
   rankingContainer.innerHTML = rankingHTML;
   rankingContainer.style.display = "block"; // Asegúrate de que sea visible
-  resetRankBtn.style.display = "block";
+  resetRankBtn.style.display = "block"; // Mostrar el botón de reinicio e rankings
 }
 
+// Reinicia los rankings
 function resetRankings() {
+  // Eliminar los rankings del localStorage
   localStorage.removeItem("rankings");
   alert("Rankings reiniciados.");
 }
 
+// Eventos
+
+// Cargar un párrafo aleatorio al cargar la página
 loadParagraph();
 
+// Eventos de los elementos del DOM.
 timeItems.forEach((item) => {
+  // Añadir el evento de clic a cada elemento.
   item.addEventListener("click", () => {
     // Obtener el tiempo del texto del elemento (eliminar "s" y convertir a número)
     maxTime = parseInt(item.innerText.replace("s", ""));
