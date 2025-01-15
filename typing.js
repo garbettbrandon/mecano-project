@@ -53,7 +53,9 @@ function loadParagraph() {
   // Crear un span para cada carácter del párrafo
   paragraphs[ranIndex].split("").forEach((char) => {
     let span = document.createElement("span");
+    // Añadir el carácter al span
     span.textContent = char;
+    // Añadir el span al fragmento.
     fragment.appendChild(span);
   });
   // Limpiar el contenido actual y añadir el nuevo párrafo
