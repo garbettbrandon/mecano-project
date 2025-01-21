@@ -256,6 +256,10 @@ li:not(:first-child) span {
   text-align: center;
 }
 
+.hidden {
+  display: none;
+}
+
 @media (max-width: 745px) {
   .wrapper {
     padding: 20px;
