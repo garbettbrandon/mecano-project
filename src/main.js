@@ -21,7 +21,7 @@ let gameState = resetGameState();
 
 function resetGame() {
   gameState = resetGameState(gameState.maxTime);
-  loadParagraph(typingText);
+  loadParagraph(typingText, inpField);
   inpField.value = "";
   updateStatsDisplay(wpmTag, mistakeTag, cpmTag, gameState, 0);
   timeTag.innerText = gameState.timeLeft;
@@ -102,12 +102,9 @@ timeItems.forEach((item) =>
   })
 );
 
-inpField.addEventListener("input", handleTyping);
 tryAgainBtn.addEventListener("click", resetGame);
 rankButton.addEventListener("click", () =>
   loadRankings(rankingContainer, resetRankBtn)
 );
-
 resetRankBtn.addEventListener("click", resetRankings);
-document.addEventListener("keydown", () => inpField.focus());
-typingText.addEventListener("click", () => inpField.focus());
+inpField.addEventListener("input", handleTyping);

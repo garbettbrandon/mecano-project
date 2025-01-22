@@ -12,7 +12,9 @@ export function saveScore(gameState, wpm, mistakes) {
 
 export function loadRankings(rankingContainer, resetRankBtn) {
   if (rankingContainer.style.display === "flex") {
-    location.reload();
+    rankingContainer.style.display = "none";
+    resetRankBtn.style.display = "none";
+    return;
   }
 
   const rankings = JSON.parse(localStorage.getItem("rankings")) || {
@@ -24,7 +26,6 @@ export function loadRankings(rankingContainer, resetRankBtn) {
 
   let rankingHTML = "";
   let hasResults = false;
-  let isRankingVisible = false;
 
   Object.entries(rankings).forEach(([time, scores]) => {
     if (scores.length > 0) {
@@ -47,7 +48,6 @@ export function loadRankings(rankingContainer, resetRankBtn) {
   rankingContainer.innerHTML = rankingHTML;
   rankingContainer.style.display = "flex";
   resetRankBtn.style.display = "block";
-  isRankingVisible = true;
 }
 
 export function resetRankings() {

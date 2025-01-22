@@ -20,7 +20,7 @@ export const paragraphs = [
   "Those cowbells are nothing more than elements. This could be, or perhaps before stockings, thoughts were only opinions. A coil of the exclamation is assumed to be a hurtless toy. A board is the cast of a religion. In ancient times the first stinko sailboat is, in its own way, an exchange. Few can name a tutti channel that isn't a footless operation. Extending this logic, an oatmeal is the rooster of a shake. Those step-sons are nothing more than matches.",
 ];
 
-export function loadParagraph(typingText) {
+export function loadParagraph(typingText, inpField) {
   const randomParagraph =
     paragraphs[Math.floor(Math.random() * paragraphs.length)];
   typingText.innerHTML = randomParagraph
@@ -28,4 +28,6 @@ export function loadParagraph(typingText) {
     .map((char) => `<span>${char}</span>`)
     .join("");
   typingText.querySelector("span").classList.add("active");
+  document.addEventListener("keydown", () => inpField.focus());
+  typingText.addEventListener("click", () => inpField.focus());
 }
