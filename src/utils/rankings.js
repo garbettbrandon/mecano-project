@@ -3,7 +3,7 @@ export function saveScore(gameState, wpm, mistakes) {
     "30s": [],
     "60s": [],
     "120s": [],
-    "Free": [],
+    Free: [],
   };
   rankings[`${gameState.maxTime}s`].push({ wpm, mistakes });
   rankings[`${gameState.maxTime}s`].sort((a, b) => b.wpm - a.wpm);
@@ -11,15 +11,20 @@ export function saveScore(gameState, wpm, mistakes) {
 }
 
 export function loadRankings(rankingContainer, resetRankBtn) {
+  if (rankingContainer.style.display === "flex") {
+    location.reload();
+  }
+
   const rankings = JSON.parse(localStorage.getItem("rankings")) || {
     "30s": [],
     "60s": [],
     "120s": [],
-    "Free": [],
+    Free: [],
   };
 
   let rankingHTML = "";
   let hasResults = false;
+  let isRankingVisible = false;
 
   Object.entries(rankings).forEach(([time, scores]) => {
     if (scores.length > 0) {
@@ -42,6 +47,7 @@ export function loadRankings(rankingContainer, resetRankBtn) {
   rankingContainer.innerHTML = rankingHTML;
   rankingContainer.style.display = "flex";
   resetRankBtn.style.display = "block";
+  isRankingVisible = true;
 }
 
 export function resetRankings() {

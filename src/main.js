@@ -101,11 +101,13 @@ timeItems.forEach((item) =>
     item.classList.add("active");
   })
 );
+
 inpField.addEventListener("input", handleTyping);
 tryAgainBtn.addEventListener("click", resetGame);
 rankButton.addEventListener("click", () =>
   loadRankings(rankingContainer, resetRankBtn)
 );
+
 resetRankBtn.addEventListener("click", resetRankings);
 document.addEventListener("keydown", () => inpField.focus());
 typingText.addEventListener("click", () => inpField.focus());
