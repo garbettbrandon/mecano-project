@@ -30,8 +30,8 @@ El proyecto tiene la siguiente estructura de archivos:
 1. Clona el repositorio:
 
    ```sh
-   git clone <URL_DEL_REPOSITORIO>
-   cd <NOMBRE_DEL_REPOSITORIO>
+   git clone https://github.com/garbettbrandon/mecano-project.git
+   cd mecano-project
 
    ```
 
