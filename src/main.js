@@ -24,15 +24,19 @@ function resetGame() {
   loadParagraph(typingText, inpField);
   inpField.value = "";
   updateStatsDisplay(wpmTag, mistakeTag, cpmTag, gameState, 0);
-  timeTag.innerText = gameState.timeLeft;
+  timeTag.innerText = gameState.maxTime === "Free" ? "∞" : gameState.timeLeft;
 }
 
 function handleTyping() {
   const characters = typingText.querySelectorAll("span");
   const typedChar = inpField.value[gameState.charIndex];
 
-  if (gameState.charIndex < characters.length - 1 && gameState.timeLeft > 0) {
+  if (
+    gameState.charIndex < characters.length - 1 &&
+    (gameState.timeLeft > 0 || gameState.maxTime === "Free")
+  ) {
     if (!gameState.isTyping) {
+      gameState.startTime = Date.now();
       startTimer(
         gameState,
         (timeLeft) => (timeTag.innerText = timeLeft),
@@ -95,7 +99,10 @@ resetGame();
 
 timeItems.forEach((item) =>
   item.addEventListener("click", () => {
-    gameState.maxTime = parseInt(item.innerText.replace("s", ""));
+    gameState.maxTime =
+      item.innerText === "Free"
+        ? "Free"
+        : parseInt(item.innerText.replace("s", ""));
     resetGame();
     timeItems.forEach((el) => el.classList.remove("active"));
     item.classList.add("active");

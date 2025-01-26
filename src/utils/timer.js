@@ -1,4 +1,8 @@
 export function startTimer(gameState, updateTimeDisplay, onFinish) {
+  if (gameState.maxTime === "Free") {
+    return;
+  }
+
   gameState.timer = setInterval(() => {
     if (gameState.timeLeft > 0) {
       gameState.timeLeft--;

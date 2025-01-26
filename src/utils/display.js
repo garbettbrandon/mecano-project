@@ -9,10 +9,15 @@ export function updateStatsDisplay(wpmTag, mistakeTag, cpmTag, gameState, wpm) {
 }
 
 export function calculateWPM(gameState) {
-  const timeElapsed = gameState.maxTime - gameState.timeLeft;
+  const timeElapsed =
+    gameState.maxTime === "Free"
+      ? gameState.startTime
+        ? (Date.now() - gameState.startTime) / 1000
+        : 0
+      : gameState.maxTime - gameState.timeLeft;
   return timeElapsed > 0
     ? Math.round(
-        ((gameState.charIndex - gameState.mistakes) / 5 / timeElapsed) * 60
+        (gameState.charIndex - gameState.mistakes) / 5 / (timeElapsed / 60)
       )
     : 0;
 }

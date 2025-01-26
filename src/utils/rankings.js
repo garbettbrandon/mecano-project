@@ -5,8 +5,10 @@ export function saveScore(gameState, wpm, mistakes) {
     "120s": [],
     Free: [],
   };
-  rankings[`${gameState.maxTime}s`].push({ wpm, mistakes });
-  rankings[`${gameState.maxTime}s`].sort((a, b) => b.wpm - a.wpm);
+  const timeKey =
+    gameState.maxTime === "Free" ? "Free" : `${gameState.maxTime}s`;
+  rankings[timeKey].push({ wpm, mistakes });
+  rankings[timeKey].sort((a, b) => b.wpm - a.wpm);
   localStorage.setItem("rankings", JSON.stringify(rankings));
 }
 
